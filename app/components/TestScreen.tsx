@@ -1,6 +1,27 @@
 "use client";
 import { useState, useEffect } from "react";
 import { QUESTIONS } from "../lib/questions";
+import { QuestionText } from "./WordTooltip";
+
+const TOTAL_SECONDS = 35 * 60; // estimated 35 minutes
+
+function useTimer(startTime: number | null) {
+  const [elapsed, setElapsed] = useState(0);
+  useEffect(() => {
+    if (!startTime) return;
+    const id = setInterval(() => {
+      setElapsed(Math.floor((Date.now() - startTime) / 1000));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [startTime]);
+  return elapsed;
+}
+
+function formatTime(seconds: number) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
 
 interface TestScreenProps {
   answers: (number | null)[];
@@ -8,6 +29,7 @@ interface TestScreenProps {
   onAnswer: (questionIndex: number, answerIndex: number) => void;
   onNavigate: (idx: number) => void;
   onComplete: () => void;
+  startTime?: number | null;
 }
 
 const OPTION_LABELS = ["A", "B", "C"];
@@ -17,9 +39,12 @@ const OPTION_COLORS = [
   { bg: "#f0faf4", border: "#6db88a", text: "#1f6b3e", dot: "#4a7c59" },
 ];
 
-export default function TestScreen({ answers, initialQuestion, onAnswer, onNavigate, onComplete }: TestScreenProps) {
+export default function TestScreen({ answers, initialQuestion, onAnswer, onNavigate, onComplete, startTime }: TestScreenProps) {
   const [current, setCurrent] = useState(initialQuestion);
   const [key, setKey] = useState(0); // for re-animation
+  const elapsed = useTimer(startTime ?? null);
+  const remaining = Math.max(0, TOTAL_SECONDS - elapsed);
+  const isOverTime = elapsed > TOTAL_SECONDS;
 
   const q = QUESTIONS[current];
   const answeredCount = answers.filter((a) => a !== null).length;
@@ -73,6 +98,13 @@ export default function TestScreen({ answers, initialQuestion, onAnswer, onNavig
           </div>
           <div className="flex justify-between text-xs text-slate-400">
             <span>{answeredCount} answered</span>
+            {startTime && (
+              <span style={{ color: isOverTime ? '#b94040' : elapsed > TOTAL_SECONDS * 0.8 ? '#c8861a' : undefined }}>
+                ⏱ {formatTime(elapsed)} elapsed
+                {!isOverTime && <span className="ml-2 opacity-60">{formatTime(remaining)} left</span>}
+                {isOverTime && <span className="ml-1 font-semibold" style={{ color: '#b94040' }}>· over estimate</span>}
+              </span>
+            )}
             <span>{187 - answeredCount} remaining</span>
           </div>
         </div>
@@ -93,7 +125,7 @@ export default function TestScreen({ answers, initialQuestion, onAnswer, onNavig
             </div>
             <p className="font-serif text-xl md:text-2xl leading-relaxed mb-8"
                style={{ fontFamily: 'Lora, Georgia, serif', color: '#0f1b2d' }}>
-              {q.text}
+              <QuestionText text={q.text} />
             </p>
 
             {/* Options */}

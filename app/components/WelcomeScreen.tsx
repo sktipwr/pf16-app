@@ -1,13 +1,16 @@
 "use client";
+import SiteFooter from "./SiteFooter";
 
 interface WelcomeProps {
   onStart: () => void;
   onResume: () => void;
   hasProgress: boolean;
   answeredCount: number;
+  visitCount?: number | null;
+  attemptCount?: number | null;
 }
 
-export default function WelcomeScreen({ onStart, onResume, hasProgress, answeredCount }: WelcomeProps) {
+export default function WelcomeScreen({ onStart, onResume, hasProgress, answeredCount, visitCount, attemptCount }: WelcomeProps) {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="max-w-2xl w-full">
@@ -92,6 +95,8 @@ export default function WelcomeScreen({ onStart, onResume, hasProgress, answered
           Your progress is automatically saved to your browser
         </p>
       </div>
+
+      <SiteFooter visitCount={visitCount} attemptCount={attemptCount} />
     </div>
   );
 }

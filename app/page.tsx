@@ -20,6 +20,9 @@ export default function Home() {
   } = useTestProgress();
 
   const [screen, setScreen] = useState<Screen>("welcome");
+  const [visitCount, setVisitCount] = useState<number | null>(null);
+  const [attemptCount, setAttemptCount] = useState<number | null>(null);
+  const [testStartTime, setTestStartTime] = useState<number | null>(null);
 
   // If test was already completed last session, go straight to report
   useEffect(() => {
@@ -28,12 +31,33 @@ export default function Home() {
     }
   }, [loaded]);
 
+  // On mount: increment visit counter, read attempt count
+  useEffect(() => {
+    if (!loaded) return;
+    fetch("/api/counter/visits", { method: "POST" })
+      .then((r) => r.json())
+      .then((d) => setVisitCount(d.value ?? null))
+      .catch(() => {});
+
+    fetch("/api/counter/attempts")
+      .then((r) => r.json())
+      .then((d) => setAttemptCount(d.value ?? null))
+      .catch(() => {});
+  }, [loaded]);
+
   const handleStart = () => {
     resetProgress();
+    setTestStartTime(Date.now());
     setScreen("test");
+    // Increment attempt counter
+    fetch("/api/counter/attempts", { method: "POST" })
+      .then((r) => r.json())
+      .then((d) => setAttemptCount(d.value ?? null))
+      .catch(() => {});
   };
 
   const handleResume = () => {
+    if (!testStartTime) setTestStartTime(Date.now());
     setScreen("test");
   };
 
@@ -44,6 +68,7 @@ export default function Home() {
 
   const handleRetake = () => {
     resetProgress();
+    setTestStartTime(null);
     setScreen("welcome");
   };
 
@@ -63,6 +88,8 @@ export default function Home() {
           onResume={handleResume}
           hasProgress={answeredCount > 0}
           answeredCount={answeredCount}
+          visitCount={visitCount}
+          attemptCount={attemptCount}
         />
       )}
       {screen === "test" && (
@@ -72,12 +99,15 @@ export default function Home() {
           onAnswer={(qi, ai) => setAnswer(qi, ai)}
           onNavigate={(idx) => setCurrentQuestion(idx)}
           onComplete={handleComplete}
+          startTime={testStartTime}
         />
       )}
       {screen === "report" && (
         <ReportScreen
           answers={progress.answers}
           onRetake={handleRetake}
+          visitCount={visitCount}
+          attemptCount={attemptCount}
         />
       )}
     </>

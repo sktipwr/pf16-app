@@ -2,10 +2,13 @@
 import { useMemo } from "react";
 import { computeScores, FactorScore } from "../lib/scoring";
 import { QUESTIONS } from "../lib/questions";
+import SiteFooter from "./SiteFooter";
 
 interface ReportProps {
   answers: (number | null)[];
   onRetake: () => void;
+  visitCount?: number | null;
+  attemptCount?: number | null;
 }
 
 const LEVEL_COLORS = {
@@ -14,7 +17,7 @@ const LEVEL_COLORS = {
   high: { bg: "#f0f9f4", border: "#6db88a", text: "#1f6b3e", bar: "#6db88a", label: "High" },
 };
 
-export default function ReportScreen({ answers, onRetake }: ReportProps) {
+export default function ReportScreen({ answers, onRetake, visitCount, attemptCount }: ReportProps) {
   const scores = useMemo(() => computeScores(answers), [answers]);
   const answeredCount = answers.filter((a) => a !== null).length;
   const skippedCount = 187 - answeredCount;
@@ -187,6 +190,8 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
           consult a qualified psychologist.
         </p>
       </div>
+
+      <SiteFooter visitCount={visitCount} attemptCount={attemptCount} />
     </div>
   );
 }
