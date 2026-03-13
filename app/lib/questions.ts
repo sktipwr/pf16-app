@@ -62,13 +62,10 @@ export const SCORING_MAP: Record<number, { factor: string; reverse: boolean }> =
 
   4: { factor: "C", reverse: false },
   18: { factor: "C", reverse: true },
-  29: { factor: "C", reverse: true },
   49: { factor: "C", reverse: true },
   73: { factor: "C", reverse: false },
   99: { factor: "C", reverse: true },
-  118: { factor: "C", reverse: true },
   129: { factor: "C", reverse: true },
-  149: { factor: "C", reverse: true },
 
   38: { factor: "E", reverse: false },
   56: { factor: "E", reverse: false },
@@ -86,10 +83,8 @@ export const SCORING_MAP: Record<number, { factor: string; reverse: boolean }> =
 
   6: { factor: "G", reverse: false },
   42: { factor: "G", reverse: false },
-  48: { factor: "G", reverse: false },
   98: { factor: "G", reverse: false },
   160: { factor: "G", reverse: false },
-  184: { factor: "G", reverse: false },
 
   35: { factor: "H", reverse: true },
   61: { factor: "H", reverse: true },
@@ -114,7 +109,6 @@ export const SCORING_MAP: Record<number, { factor: string; reverse: boolean }> =
   11: { factor: "M", reverse: false },
   29: { factor: "M", reverse: false },
   62: { factor: "M", reverse: true },
-  87: { factor: "M", reverse: false },
   109: { factor: "M", reverse: false },
 
   17: { factor: "N", reverse: true },
@@ -131,6 +125,7 @@ export const SCORING_MAP: Record<number, { factor: string; reverse: boolean }> =
   118: { factor: "O", reverse: false },
   123: { factor: "O", reverse: false },
 
+
   31: { factor: "Q1", reverse: false },
   59: { factor: "Q1", reverse: false },
   120: { factor: "Q1", reverse: true },
@@ -143,7 +138,6 @@ export const SCORING_MAP: Record<number, { factor: string; reverse: boolean }> =
   86: { factor: "Q2", reverse: false },
   122: { factor: "Q2", reverse: true },
   146: { factor: "Q2", reverse: false },
-  158: { factor: "Q2", reverse: false },
 
   30: { factor: "Q3", reverse: false },
   48: { factor: "Q3", reverse: false },
@@ -155,7 +149,6 @@ export const SCORING_MAP: Record<number, { factor: string; reverse: boolean }> =
   5: { factor: "Q4", reverse: false },
   25: { factor: "Q4", reverse: true },
   41: { factor: "Q4", reverse: false },
-  99: { factor: "Q4", reverse: false },
   124: { factor: "Q4", reverse: false },
   147: { factor: "Q4", reverse: false },
   149: { factor: "Q4", reverse: false },
