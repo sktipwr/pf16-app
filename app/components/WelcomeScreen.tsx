@@ -1,55 +1,52 @@
 "use client";
-import SiteFooter from "./SiteFooter";
 
 interface WelcomeProps {
   onStart: () => void;
   onResume: () => void;
   hasProgress: boolean;
   answeredCount: number;
-  visitCount?: number | null;
-  attemptCount?: number | null;
 }
 
-export default function WelcomeScreen({ onStart, onResume, hasProgress, answeredCount, visitCount, attemptCount }: WelcomeProps) {
+export default function WelcomeScreen({ onStart, onResume, hasProgress, answeredCount }: WelcomeProps) {
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="max-w-2xl w-full">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 pb-20">
+      <div className="max-w-xl w-full">
 
         {/* Header */}
-        <div className="text-center mb-12 animate-fade-up">
+        <div className="text-center mb-10 animate-fade-up">
           <div className="inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-700 text-xs font-semibold tracking-widest uppercase px-4 py-2 rounded-full mb-6">
             <span>◆</span> Personality Assessment <span>◆</span>
           </div>
-          <h1 className="font-serif text-5xl md:text-6xl font-bold text-navy-900 leading-tight mb-4"
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-4"
               style={{ fontFamily: 'Lora, Georgia, serif', color: '#0f1b2d' }}>
             16 Personality<br />
             <span style={{ color: '#c8861a' }}>Factors</span>
           </h1>
-          <p className="text-lg text-slate-500 max-w-lg mx-auto leading-relaxed" style={{ fontFamily: 'Instrument Sans, sans-serif' }}>
+          <p className="text-base sm:text-lg text-slate-500 max-w-lg mx-auto leading-relaxed">
             A comprehensive psychological assessment measuring 16 core dimensions of your personality, developed by Raymond Cattell.
           </p>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mb-8 animate-fade-up" style={{ animationDelay: '0.1s' }}>
+        <div className="grid grid-cols-3 gap-3 mb-8 animate-fade-up" style={{ animationDelay: '0.1s' }}>
           {[
             { icon: "📋", value: "187", label: "Questions" },
             { icon: "⏱", value: "~35", label: "Minutes" },
             { icon: "🔬", value: "16", label: "Factors" },
           ].map((s) => (
-            <div key={s.label} className="rounded-2xl p-5 text-center border"
+            <div key={s.label} className="rounded-2xl p-4 sm:p-5 text-center border"
                  style={{ background: 'white', borderColor: '#e2d8c8', boxShadow: '0 2px 12px rgba(15,27,45,0.05)' }}>
-              <div className="text-2xl mb-2">{s.icon}</div>
-              <div className="font-serif text-3xl font-bold mb-1" style={{ color: '#c8861a', fontFamily: 'Lora, serif' }}>{s.value}</div>
+              <div className="text-xl sm:text-2xl mb-1">{s.icon}</div>
+              <div className="font-serif text-2xl sm:text-3xl font-bold mb-1" style={{ color: '#c8861a', fontFamily: 'Lora, serif' }}>{s.value}</div>
               <div className="text-xs text-slate-400 uppercase tracking-wide font-medium">{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* Instructions */}
-        <div className="rounded-2xl p-7 mb-8 border animate-fade-up"
+        <div className="rounded-2xl p-5 sm:p-7 mb-8 border animate-fade-up"
              style={{ background: 'white', borderColor: '#e2d8c8', animationDelay: '0.2s' }}>
-          <h3 className="font-serif font-semibold text-lg mb-4" style={{ color: '#0f1b2d', fontFamily: 'Lora, serif' }}>
+          <h3 className="font-serif font-semibold text-base sm:text-lg mb-4" style={{ color: '#0f1b2d', fontFamily: 'Lora, serif' }}>
             Before you begin
           </h3>
           <ol className="space-y-3">
@@ -70,13 +67,13 @@ export default function WelcomeScreen({ onStart, onResume, hasProgress, answered
 
         {/* Resume banner */}
         {hasProgress && answeredCount > 0 && (
-          <div className="rounded-xl p-4 mb-4 flex items-center justify-between border animate-fade-in"
+          <div className="rounded-xl p-4 mb-4 flex items-center justify-between gap-3 border animate-fade-in"
                style={{ background: '#f0f9f0', borderColor: '#a8d5b0' }}>
             <div className="text-sm" style={{ color: '#2d6b3e' }}>
-              <span className="font-semibold">Progress saved</span> — you've answered {answeredCount} of 187 questions
+              <span className="font-semibold">Progress saved</span> — {answeredCount} of 187 answered
             </div>
             <button onClick={onResume}
-                    className="text-sm font-semibold px-4 py-2 rounded-lg transition-all hover:opacity-90"
+                    className="text-sm font-semibold px-4 py-2 rounded-lg transition-all hover:opacity-90 flex-shrink-0"
                     style={{ background: '#4a7c59', color: 'white' }}>
               Resume →
             </button>
@@ -85,7 +82,7 @@ export default function WelcomeScreen({ onStart, onResume, hasProgress, answered
 
         {/* CTA */}
         <button onClick={onStart}
-                className="w-full py-5 rounded-2xl text-lg font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 animate-fade-up"
+                className="w-full py-4 sm:py-5 rounded-2xl text-base sm:text-lg font-semibold transition-all hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 animate-fade-up"
                 style={{ background: 'linear-gradient(135deg, #0f1b2d, #1a2d45)', color: 'white', animationDelay: '0.3s',
                          boxShadow: '0 8px 32px rgba(15,27,45,0.25)' }}>
           {hasProgress && answeredCount > 0 ? "Start Fresh" : "Begin Assessment →"}
@@ -95,8 +92,6 @@ export default function WelcomeScreen({ onStart, onResume, hasProgress, answered
           Your progress is automatically saved to your browser
         </p>
       </div>
-
-      <SiteFooter visitCount={visitCount} attemptCount={attemptCount} />
     </div>
   );
 }
