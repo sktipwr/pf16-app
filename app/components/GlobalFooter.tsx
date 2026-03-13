@@ -5,7 +5,7 @@ export default function GlobalFooter() {
   const [visitCount, setVisitCount] = useState<number | null>(null);
   const [attemptCount, setAttemptCount] = useState<number | null>(null);
 
-  const today = new Date().toLocaleDateString("en-US", {
+  const today = new Date().toLocaleDateString("en-IN", {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -33,28 +33,45 @@ export default function GlobalFooter() {
           borderColor: "#e2d8c8",
         }}
       >
-        <div className="max-w-3xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5">
-          {/* Stats */}
-          <div className="flex items-center gap-3 text-xs text-slate-400 flex-wrap">
-            <span>📅 {today}</span>
-            {visitCount != null && (
-              <span>👁 {visitCount.toLocaleString()} visitors</span>
-            )}
-            {attemptCount != null && (
-              <span>✏️ {attemptCount.toLocaleString()} taken</span>
-            )}
+        <div className="max-w-3xl mx-auto px-3 py-1.5 flex items-center justify-between gap-2">
+          {/* Left: date */}
+          <span className="text-xs text-slate-400 whitespace-nowrap">
+            📅 {today}
+          </span>
+
+          {/* Centre: visitor + attempt stats — pill-style highlight */}
+          <div className="flex items-center gap-2">
+            <span
+              className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
+              style={{ background: "#f0e6d0", color: "#9a6e1f" }}
+            >
+              👁{" "}
+              {visitCount != null ? visitCount.toLocaleString("en-IN") : "—"}{" "}
+              visitors
+            </span>
+            <span
+              className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
+              style={{ background: "#e8f4ec", color: "#2e7d4f" }}
+            >
+              ✏️{" "}
+              {attemptCount != null
+                ? attemptCount.toLocaleString("en-IN")
+                : "—"}{" "}
+              taken
+            </span>
           </div>
-          {/* Author */}
-          <p className="text-xs text-slate-400">
-            Made with ♥ by{" "}
+
+          {/* Right: author */}
+          <p className="text-xs text-slate-400 whitespace-nowrap">
+            ♥{" "}
             <a
-              href="https://softles.com"
+              href="https://softles.in"
               target="_blank"
               rel="noopener noreferrer"
               className="font-semibold hover:underline"
               style={{ color: "#c8861a" }}
             >
-              softles.com
+              softles.in
             </a>
           </p>
         </div>

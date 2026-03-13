@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
+// Using counterapi.dev — free, no signup, actively maintained
+// Docs: https://counterapi.dev
 const NAMESPACE = "pf16-softles";
 
 // POST: increment counter and return new value
@@ -10,11 +12,11 @@ export async function POST(
 ) {
   try {
     const res = await fetch(
-      `https://api.countapi.xyz/hit/${NAMESPACE}/${params.key}`,
+      `https://api.counterapi.dev/v1/${NAMESPACE}/${params.key}/up`,
       { cache: "no-store" }
     );
     const data = await res.json();
-    return NextResponse.json({ value: data.value ?? null });
+    return NextResponse.json({ value: data.count ?? null });
   } catch {
     return NextResponse.json({ value: null });
   }
@@ -27,11 +29,11 @@ export async function GET(
 ) {
   try {
     const res = await fetch(
-      `https://api.countapi.xyz/get/${NAMESPACE}/${params.key}`,
+      `https://api.counterapi.dev/v1/${NAMESPACE}/${params.key}`,
       { cache: "no-store" }
     );
     const data = await res.json();
-    return NextResponse.json({ value: data.value ?? null });
+    return NextResponse.json({ value: data.count ?? null });
   } catch {
     return NextResponse.json({ value: null });
   }
