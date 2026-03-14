@@ -81,7 +81,7 @@ function CompletedSummary({
           </div>
           <h1
             className="font-serif text-3xl sm:text-4xl font-bold mb-2"
-            style={{ fontFamily: "Lora, Georgia, serif", color: "#0f1b2d" }}
+            style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "#0f1b2d" }}
           >
             Assessment Complete
           </h1>
@@ -98,7 +98,7 @@ function CompletedSummary({
           >
             <h3
               className="font-serif font-semibold text-base mb-4"
-              style={{ fontFamily: "Lora, serif", color: "#0f1b2d" }}
+              style={{ fontFamily: "'DM Serif Display', serif", color: "#0f1b2d" }}
             >
               Your Top Traits
             </h3>
@@ -199,7 +199,7 @@ export default function WelcomeScreen({
           <div className="text-center mb-8 animate-fade-up">
             <h1
               className="font-serif text-3xl sm:text-4xl font-bold mb-2"
-              style={{ fontFamily: "Lora, Georgia, serif", color: "#0f1b2d" }}
+              style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "#0f1b2d" }}
             >
               Welcome Back
             </h1>
@@ -289,7 +289,7 @@ function NewUserWelcome({ onStart }: { onStart: () => void }) {
           </div>
           <h1
             className="font-serif text-4xl sm:text-5xl font-bold leading-tight mb-4"
-            style={{ fontFamily: "Lora, Georgia, serif", color: "#0f1b2d" }}
+            style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "#0f1b2d" }}
           >
             16 Personality<br />
             <span style={{ color: "#c8861a" }}>Factors</span>
@@ -311,7 +311,7 @@ function NewUserWelcome({ onStart }: { onStart: () => void }) {
               style={{ background: "white", borderColor: "#e2d8c8", boxShadow: "0 2px 14px rgba(15,27,45,0.05)", animationDelay: s.delay }}
             >
               <div className="text-xl sm:text-2xl mb-1">{s.icon}</div>
-              <div className="font-serif text-2xl sm:text-3xl font-bold mb-0.5 tabular-nums" style={{ color: "#c8861a", fontFamily: "Lora, serif" }}>
+              <div className="font-serif text-2xl sm:text-3xl font-bold mb-0.5 tabular-nums" style={{ color: "#c8861a", fontFamily: "'DM Serif Display', serif" }}>
                 {s.value}
               </div>
               <div className="text-xs text-slate-400 uppercase tracking-wide font-medium">{s.label}</div>
@@ -323,7 +323,7 @@ function NewUserWelcome({ onStart }: { onStart: () => void }) {
           className="rounded-2xl p-5 sm:p-6 mb-6 border animate-fade-up"
           style={{ background: "white", borderColor: "#e2d8c8", animationDelay: "0.22s" }}
         >
-          <h3 className="font-serif font-semibold text-base mb-4" style={{ color: "#0f1b2d", fontFamily: "Lora, serif" }}>
+          <h3 className="font-serif font-semibold text-base mb-4" style={{ color: "#0f1b2d", fontFamily: "'DM Serif Display', serif" }}>
             Before you begin
           </h3>
           <ol className="space-y-3">

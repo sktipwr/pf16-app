@@ -33,16 +33,16 @@ export default function GlobalFooter() {
           borderColor: "#e2d8c8",
         }}
       >
-        <div className="max-w-3xl mx-auto px-5 sm:px-6 py-2 flex items-center justify-between gap-3">
+        <div className="max-w-3xl mx-auto px-5 sm:px-6 py-2.5 flex items-center justify-between gap-3" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
           {/* Left: date */}
-          <span className="text-xs text-slate-400 whitespace-nowrap">
+          <span className="text-[11px] font-medium tracking-wide whitespace-nowrap" style={{ color: "#8a7f6e", letterSpacing: "0.03em" }}>
             📅 {today}
           </span>
 
           {/* Centre: visitor + attempt stats — pill-style highlight */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <span
-              className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
+              className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide"
               style={{ background: "#f0e6d0", color: "#9a6e1f" }}
             >
               👁{" "}
@@ -50,7 +50,7 @@ export default function GlobalFooter() {
               visitors
             </span>
             <span
-              className="flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
+              className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide"
               style={{ background: "#e8f4ec", color: "#2e7d4f" }}
             >
               ✏️{" "}
@@ -62,13 +62,13 @@ export default function GlobalFooter() {
           </div>
 
           {/* Right: author */}
-          <p className="text-xs text-slate-400 whitespace-nowrap">
+          <p className="text-[11px] font-medium tracking-wide whitespace-nowrap" style={{ color: "#8a7f6e" }}>
             ♥{" "}
             <a
               href="https://softles.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold hover:underline"
+              className="font-bold hover:underline"
               style={{ color: "#c8861a" }}
             >
               softles.in

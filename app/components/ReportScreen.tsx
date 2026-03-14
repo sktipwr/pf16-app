@@ -82,7 +82,7 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
           </div>
           <h1
             className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold mb-3"
-            style={{ fontFamily: "Lora, Georgia, serif", color: "#0f1b2d" }}
+            style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "#0f1b2d" }}
           >
             Your Personality Report
           </h1>
@@ -105,7 +105,7 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
             >
               <div
                 className="font-serif text-2xl sm:text-3xl font-bold mb-1 tabular-nums"
-                style={{ color: s.c, fontFamily: "Lora, serif" }}
+                style={{ color: s.c, fontFamily: "'DM Serif Display', serif" }}
               >
                 {s.v}
               </div>
@@ -122,7 +122,7 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
           >
             <h2
               className="font-serif text-lg sm:text-xl font-semibold mb-5"
-              style={{ fontFamily: "Lora, serif", color: "#0f1b2d" }}
+              style={{ fontFamily: "'DM Serif Display', serif", color: "#0f1b2d" }}
             >
               Your Strongest Traits
             </h2>
@@ -153,7 +153,7 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
         <div className="mb-8">
           <h2
             className="font-serif text-lg sm:text-xl font-semibold mb-5 animate-fade-up"
-            style={{ fontFamily: "Lora, serif", color: "#0f1b2d", animationDelay: "0.2s" }}
+            style={{ fontFamily: "'DM Serif Display', serif", color: "#0f1b2d", animationDelay: "0.2s" }}
           >
             All 16 Factor Scores
           </h2>
@@ -183,7 +183,7 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
                         </span>
                         <span
                           className="font-serif font-semibold text-base sm:text-lg"
-                          style={{ fontFamily: "Lora, serif", color: "#0f1b2d" }}
+                          style={{ fontFamily: "'DM Serif Display', serif", color: "#0f1b2d" }}
                         >
                           {s.factor.label}
                         </span>
@@ -195,7 +195,7 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
                     <div className="text-right flex-shrink-0">
                       <div
                         className="font-serif text-xl sm:text-2xl font-bold tabular-nums"
-                        style={{ fontFamily: "Lora, serif", color: col.bar }}
+                        style={{ fontFamily: "'DM Serif Display', serif", color: col.bar }}
                       >
                         <AnimatedPct value={s.percentage} delay={delay * 1000} />
                       </div>
