@@ -88,6 +88,11 @@ export default function TestScreen({
   const avgSecsPerQ    = answeredCount > 4 ? elapsed / answeredCount : 11;
   const estimatedSecsLeft = Math.round(avgSecsPerQ * questionsLeft);
 
+  // Scroll to top when entering the test screen (e.g. from "Begin Assessment")
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Milestone detection
   useEffect(() => {
     const prev = prevAnsweredRef.current;
@@ -133,13 +138,13 @@ export default function TestScreen({
     onAnswer(current, idx);
     setJustSelected(idx);
 
-    // Gentle auto-advance: user sees their selection for 650ms, then slides to next
+    // Gentle auto-advance: user sees their selection for 1300ms, then slides to next
     if (!isLast) {
       setTransitioning(true);
       autoAdvTimer.current = setTimeout(() => {
         setTransitioning(false);
         navigate(current + 1, "next");
-      }, 650);
+      }, 1300);
     }
   };
 
@@ -254,12 +259,32 @@ export default function TestScreen({
       <div className="flex-1 flex items-start justify-center px-4 py-5 sm:py-10">
         <div className="max-w-2xl w-full">
 
-          {/* Question card — direction-aware slide animation */}
-          <div
-            key={animKey}
-            className={`${animClass} rounded-2xl p-5 sm:p-8 mb-4 border`}
-            style={{ background: "white", borderColor: "#e2d8c8", boxShadow: "0 4px 28px rgba(15,27,45,0.08)" }}
-          >
+          {/* Question card stack */}
+          <div className="relative mb-4">
+            {/* Stack card 2 (deepest) */}
+            <div
+              className="absolute inset-x-3 top-3 h-full rounded-2xl border"
+              style={{
+                background: "#f5efe3",
+                borderColor: "#ddd2c0",
+                boxShadow: "0 2px 8px rgba(15,27,45,0.04)",
+              }}
+            />
+            {/* Stack card 1 (middle) */}
+            <div
+              className="absolute inset-x-1.5 top-1.5 h-full rounded-2xl border"
+              style={{
+                background: "#faf5eb",
+                borderColor: "#e2d8c8",
+                boxShadow: "0 2px 12px rgba(15,27,45,0.05)",
+              }}
+            />
+            {/* Active card — direction-aware slide animation */}
+            <div
+              key={animKey}
+              className={`${animClass} relative rounded-2xl p-5 sm:p-8 border`}
+              style={{ background: "white", borderColor: "#e2d8c8", boxShadow: "0 4px 28px rgba(15,27,45,0.08)" }}
+            >
             <div className="flex items-center gap-2 mb-4">
               <span
                 className="text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full"
@@ -323,6 +348,7 @@ export default function TestScreen({
               })}
             </div>
           </div>
+          </div>
 
           {/* Transition progress bar — visible during auto-advance */}
           <div className="h-1.5 rounded-full overflow-hidden mb-3" style={{ background: transitioning ? "#e0d6c2" : "transparent" }}>
@@ -331,7 +357,7 @@ export default function TestScreen({
                 className="h-full rounded-full"
                 style={{
                   background: "linear-gradient(90deg, #c8861a, #e8b84b)",
-                  animation: "transitionFill 650ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
+                  animation: "transitionFill 1300ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
                 }}
               />
             )}
