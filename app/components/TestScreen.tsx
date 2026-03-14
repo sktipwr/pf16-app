@@ -43,43 +43,69 @@ const OPTION_COLORS = [
   { bg: "#f0faf4", border: "#6db88a", text: "#1f6b3e", dot: "#4a7c59", glow: "rgba(74,124,89,0.18)" },
 ];
 
-const MILESTONES = [
-  { at: 5,   emoji: "🎬", msg: "And... you're off! First 5 done." },
-  { at: 10,  emoji: "👏", msg: "Great start! You're finding your rhythm." },
-  { at: 15,  emoji: "🧩", msg: "Each answer adds a piece to your personality puzzle." },
-  { at: 20,  emoji: "🎵", msg: "You're in the zone — keep that flow going!" },
-  { at: 25,  emoji: "💡", msg: "Fun fact: 16PF measures traits most people aren't aware of." },
-  { at: 30,  emoji: "🌊", msg: "30 down — you're riding the wave now." },
-  { at: 35,  emoji: "🔍", msg: "Your personality patterns are starting to emerge..." },
-  { at: 40,  emoji: "🎨", msg: "Every answer paints a stroke on your unique portrait." },
-  { at: 47,  emoji: "🎯", msg: "25% done — a quarter of the way!" },
-  { at: 50,  emoji: "⭐", msg: "Half a century of answers! That's commitment." },
-  { at: 55,  emoji: "🧬", msg: "Fun fact: No two 16PF profiles are exactly alike." },
-  { at: 60,  emoji: "🌱", msg: "60 done — your profile is growing beautifully." },
-  { at: 65,  emoji: "🧠", msg: "Your answers are shaping a unique personality profile." },
-  { at: 70,  emoji: "💎", msg: "70 answers in — you're a diamond in the rough!" },
-  { at: 75,  emoji: "🎭", msg: "Fun fact: 16PF reveals both your public and private self." },
-  { at: 80,  emoji: "💪", msg: "80 strong! You're doing amazing." },
-  { at: 85,  emoji: "🌟", msg: "The picture of who you are is getting clearer..." },
-  { at: 94,  emoji: "🔥", msg: "Halfway there! The finish line is in sight." },
-  { at: 100, emoji: "💯", msg: "100 questions done! Triple digits — legend status." },
-  { at: 105, emoji: "🧭", msg: "Your inner compass is revealing its direction." },
-  { at: 110, emoji: "🏔️", msg: "Over 110 done — most people don't get this far!" },
-  { at: 115, emoji: "⚡", msg: "You're on fire! Keep trusting your gut." },
-  { at: 120, emoji: "🎪", msg: "Fun fact: Cattell spent 20+ years perfecting these questions." },
-  { at: 125, emoji: "🌈", msg: "125 down — your personality rainbow is nearly complete." },
-  { at: 130, emoji: "🚀", msg: "Your profile is really taking shape now." },
-  { at: 135, emoji: "🎶", msg: "Almost like a symphony — every answer harmonizes." },
-  { at: 140, emoji: "🏅", msg: "75% complete — you're in the home stretch!" },
-  { at: 145, emoji: "💫", msg: "Only 42 left — you can almost taste the results." },
-  { at: 150, emoji: "🎆", msg: "150! That's serious dedication to self-discovery." },
+const MILESTONES: { at: number; emoji: string; msg: string; confetti?: boolean }[] = [
+  { at: 3,   emoji: "🌱", msg: "Nice start! You're planting seeds of self-discovery." },
+  { at: 6,   emoji: "✨", msg: "Keep going — every answer reveals a little more." },
+  { at: 9,   emoji: "🎯", msg: "9 down! You're building momentum." },
+  { at: 12,  emoji: "🧩", msg: "Your personality puzzle is taking shape..." },
+  { at: 15,  emoji: "🌊", msg: "Flowing nicely! Trust your instincts." },
+  { at: 18,  emoji: "💡", msg: "Fun fact: These questions map 16 hidden dimensions of you." },
+  { at: 21,  emoji: "🎵", msg: "You've got a rhythm going — love to see it!" },
+  { at: 24,  emoji: "🔍", msg: "Patterns are forming... your profile is coming alive." },
+  { at: 27,  emoji: "☕", msg: "You're doing great. Take a breath if you need one." },
+  { at: 30,  emoji: "🎨", msg: "30 done! Each answer adds color to your portrait.", confetti: true },
+  { at: 33,  emoji: "🧠", msg: "Your brain is fascinating — keep sharing it with us." },
+  { at: 36,  emoji: "💪", msg: "Strong progress! You're in the top tier of completers." },
+  { at: 39,  emoji: "🌟", msg: "Fun fact: No two 16PF profiles are exactly alike." },
+  { at: 42,  emoji: "🎭", msg: "Interesting! Your answers are painting a unique story." },
+  { at: 45,  emoji: "🧭", msg: "Almost a quarter done — your compass is pointing true." },
+  { at: 47,  emoji: "🎯", msg: "25% milestone! A quarter of you, revealed.", confetti: true },
+  { at: 50,  emoji: "⭐", msg: "50 answers in — that's real commitment to growth.", confetti: true },
+  { at: 53,  emoji: "🌈", msg: "Your personality has layers — and they're beautiful." },
+  { at: 56,  emoji: "🎪", msg: "Fun fact: Cattell spent 20+ years crafting these questions." },
+  { at: 59,  emoji: "🔥", msg: "On fire! Your honesty makes your results more powerful." },
+  { at: 62,  emoji: "💎", msg: "You're revealing diamonds about yourself. Keep digging." },
+  { at: 65,  emoji: "🌺", msg: "Halfway to halfway! Your profile is blossoming." },
+  { at: 68,  emoji: "⚡", msg: "Electric pace! Your gut feelings are your superpower here." },
+  { at: 71,  emoji: "🎶", msg: "Every answer harmonizes into your unique symphony." },
+  { at: 74,  emoji: "🧬", msg: "Fun fact: 16PF reveals both your public and private self." },
+  { at: 77,  emoji: "🌙", msg: "You're uncovering parts of yourself others rarely see." },
+  { at: 80,  emoji: "💫", msg: "80 done! You're genuinely impressive.", confetti: true },
+  { at: 83,  emoji: "🏔️", msg: "Climbing higher — the view from the top will be worth it." },
+  { at: 86,  emoji: "🎸", msg: "You've got your own frequency — and it's coming through." },
+  { at: 89,  emoji: "🌿", msg: "Almost halfway! Your self-awareness is growing." },
+  { at: 92,  emoji: "🎉", msg: "Fun fact: Most people never finish — but you will." },
+  { at: 94,  emoji: "🔥", msg: "Halfway there! The finish line is on the horizon.", confetti: true },
+  { at: 97,  emoji: "🧘", msg: "Deep breath. You're doing something meaningful right now." },
+  { at: 100, emoji: "💯", msg: "100! Triple digits — you're officially a legend.", confetti: true },
+  { at: 103, emoji: "🚀", msg: "Your profile is launching into clarity." },
+  { at: 106, emoji: "🌻", msg: "Over 100 done — most people don't make it this far!" },
+  { at: 109, emoji: "🎲", msg: "Fun fact: Your results will surprise you in the best way." },
+  { at: 112, emoji: "💝", msg: "This is an act of self-love. Truly." },
+  { at: 115, emoji: "⭐", msg: "115 in! Your determination is shining bright." },
+  { at: 118, emoji: "🧊", msg: "Cool and steady — that's you right now." },
+  { at: 121, emoji: "🌍", msg: "Fun fact: 16PF is used by psychologists in 50+ countries." },
+  { at: 124, emoji: "🎨", msg: "Your personality canvas is two-thirds painted.", confetti: true },
+  { at: 127, emoji: "🦋", msg: "Something beautiful is emerging from these answers." },
+  { at: 130, emoji: "🏅", msg: "130 down! You're in rare company." },
+  { at: 133, emoji: "🌠", msg: "The stars of your personality map are aligning..." },
+  { at: 136, emoji: "☀️", msg: "Your profile is glowing. Almost there!" },
+  { at: 140, emoji: "🏆", msg: "75% complete! The home stretch begins.", confetti: true },
+  { at: 143, emoji: "🎯", msg: "Only 44 left — you can feel the finish, can't you?" },
+  { at: 146, emoji: "💎", msg: "Fun fact: Your report will cover strengths you didn't know you had." },
+  { at: 149, emoji: "🌊", msg: "Riding the final wave now. Keep going!" },
+  { at: 152, emoji: "🎆", msg: "152! That's serious dedication to knowing yourself." },
   { at: 155, emoji: "🔮", msg: "Your results are going to be fascinating..." },
-  { at: 160, emoji: "🏆", msg: "Only 27 to go — you've got this!" },
-  { at: 165, emoji: "🌠", msg: "The stars are aligning on your personality map." },
-  { at: 170, emoji: "🎊", msg: "17 left! The finish line is right there." },
-  { at: 175, emoji: "🎉", msg: "Almost there — just 12 more questions!" },
-  { at: 180, emoji: "🥇", msg: "Single digits away from your full profile!" },
-  { at: 185, emoji: "✨", msg: "2 more! Your results are nearly ready." },
+  { at: 158, emoji: "⚡", msg: "The energy is real — only 29 more!" },
+  { at: 161, emoji: "🌅", msg: "The sunrise of your full profile is near." },
+  { at: 164, emoji: "🎊", msg: "23 left! Every single one counts.", confetti: true },
+  { at: 167, emoji: "💪", msg: "You're unstoppable. 20 more and you're done!" },
+  { at: 170, emoji: "🎉", msg: "17 to go! Sprint to the finish!" },
+  { at: 173, emoji: "🌟", msg: "So close — your complete self is almost mapped." },
+  { at: 176, emoji: "🚀", msg: "11 left! Your report is nearly ready to generate." },
+  { at: 179, emoji: "🥇", msg: "Single digits away! You've earned this.", confetti: true },
+  { at: 182, emoji: "✨", msg: "5 more! The anticipation must be building..." },
+  { at: 185, emoji: "🎊", msg: "Just 2 left! Your full personality awaits.", confetti: true },
 ];
 
 const SWIPE_THRESHOLD = 80;   // px needed to trigger navigation
@@ -93,6 +119,7 @@ export default function TestScreen({
   const [direction, setDirection] = useState<"next" | "prev">("next");
   const [justSelected, setJustSelected] = useState<number | null>(null);
   const [milestone, setMilestone] = useState<typeof MILESTONES[0] | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
 
   // Drag state
@@ -128,7 +155,11 @@ export default function TestScreen({
     const hit = MILESTONES.find((m) => curr >= m.at && prev < m.at);
     if (hit) {
       setMilestone(hit);
-      setTimeout(() => setMilestone(null), 3200);
+      setTimeout(() => setMilestone(null), 2000);
+      if (hit.confetti) {
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 2500);
+      }
     }
   }, [answers]);
 
@@ -263,24 +294,37 @@ export default function TestScreen({
 
   return (
     <div className="min-h-screen flex flex-col pb-16">
-      {/* Milestone celebration — inline banner below header */}
-      {milestone && (
-        <div className="animate-milestone-slide overflow-hidden">
-          <div className="max-w-2xl mx-auto px-5 py-3">
-            <div
-              className="flex items-center gap-3 px-5 py-4 rounded-2xl"
-              style={{
-                background: "linear-gradient(135deg, rgba(200,134,26,0.1), rgba(232,184,75,0.1))",
-                border: "1px solid rgba(200,134,26,0.25)",
-              }}
-            >
-              <span className="text-3xl animate-milestone-emoji">{milestone.emoji}</span>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold" style={{ color: "#7a5a0a" }}>{milestone.msg}</p>
-                <p className="text-xs mt-0.5" style={{ color: "#9a7a2a" }}>{answeredCount} of 187 answered</p>
-              </div>
-            </div>
-          </div>
+      {/* Confetti burst overlay */}
+      {showConfetti && (
+        <div className="fixed inset-0 pointer-events-none z-50 overflow-hidden">
+          {Array.from({ length: 40 }).map((_, i) => {
+            const colors = ["#c8861a", "#e8b84b", "#4a7c59", "#7b9cf0", "#e05a6d", "#f0a030", "#9b59b6", "#2ecc71"];
+            const color = colors[i % colors.length];
+            const left = Math.random() * 100;
+            const delay = Math.random() * 0.5;
+            const duration = 1.5 + Math.random() * 1;
+            const size = 6 + Math.random() * 6;
+            const drift = (Math.random() - 0.5) * 120;
+            const shape = i % 3 === 0 ? "50%" : i % 3 === 1 ? "0" : "2px";
+            return (
+              <div
+                key={i}
+                className="absolute animate-confetti-fall"
+                style={{
+                  left: `${left}%`,
+                  top: "-12px",
+                  width: `${size}px`,
+                  height: `${size * (i % 2 === 0 ? 1 : 1.6)}px`,
+                  background: color,
+                  borderRadius: shape,
+                  animationDelay: `${delay}s`,
+                  animationDuration: `${duration}s`,
+                  // @ts-expect-error CSS custom property
+                  "--confetti-drift": `${drift}px`,
+                }}
+              />
+            );
+          })}
         </div>
       )}
 
@@ -506,6 +550,25 @@ export default function TestScreen({
             </div>
           )}
 
+          {/* Milestone celebration — between card and buttons */}
+          {milestone && (
+            <div className="animate-milestone-slide overflow-hidden">
+              <div
+                className="flex items-center gap-3 px-4 py-3 rounded-2xl mb-2"
+                style={{
+                  background: "linear-gradient(135deg, rgba(200,134,26,0.1), rgba(232,184,75,0.1))",
+                  border: "1px solid rgba(200,134,26,0.25)",
+                }}
+              >
+                <span className="text-2xl animate-milestone-emoji">{milestone.emoji}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold" style={{ color: "#7a5a0a" }}>{milestone.msg}</p>
+                  <p className="text-xs mt-0.5" style={{ color: "#9a7a2a" }}>{answeredCount} of 187 answered</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Transition progress bar — visible during auto-advance */}
           <div className="h-1.5 rounded-full overflow-hidden mb-3" style={{ background: transitioning ? "#e0d6c2" : "transparent" }}>
             {transitioning && (
@@ -524,7 +587,7 @@ export default function TestScreen({
             <button
               onClick={goPrev}
               disabled={current === 0 || transitioning}
-              className="px-5 py-3.5 rounded-xl border text-sm font-semibold transition-all disabled:opacity-25 active:scale-95"
+              className="flex-1 py-3.5 rounded-xl border text-sm font-semibold transition-all disabled:opacity-25 active:scale-95"
               style={{ borderColor: "#e2d8c8", color: "#334155", background: "white" }}
             >
               ← Back
