@@ -57,10 +57,9 @@ export default function TestScreen({
   const [justSelected, setJustSelected] = useState<number | null>(null);
   const [milestone, setMilestone] = useState<typeof MILESTONES[0] | null>(null);
 
-  const prevAnsweredRef  = useRef(answers.filter((a) => a !== null).length);
-  const autoAdvTimer     = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const touchStartX      = useRef<number | null>(null);
-  const touchStartY      = useRef<number | null>(null);
+  const prevAnsweredRef = useRef(answers.filter((a) => a !== null).length);
+  const touchStartX     = useRef<number | null>(null);
+  const touchStartY     = useRef<number | null>(null);
 
   const elapsed        = useTimer(startTime ?? null);
   const q              = QUESTIONS[current];
@@ -84,11 +83,7 @@ export default function TestScreen({
     }
   }, [answers]);
 
-  // Cleanup on unmount
-  useEffect(() => () => { if (autoAdvTimer.current) clearTimeout(autoAdvTimer.current); }, []);
-
   const navigate = useCallback((to: number, dir: "next" | "prev") => {
-    if (autoAdvTimer.current) clearTimeout(autoAdvTimer.current);
     setDirection(dir);
     setCurrent(to);
     setAnimKey((k) => k + 1);
@@ -108,13 +103,8 @@ export default function TestScreen({
   }, [current, navigate]);
 
   const selectAnswer = (idx: number) => {
-    if (autoAdvTimer.current) clearTimeout(autoAdvTimer.current);
     onAnswer(current, idx);
     setJustSelected(idx);
-    // Auto-advance after a brief "confirmed" pause
-    if (!isLast) {
-      autoAdvTimer.current = setTimeout(() => navigate(current + 1, "next"), 380);
-    }
   };
 
   // Swipe gesture support
@@ -129,8 +119,14 @@ export default function TestScreen({
     touchStartX.current = null;
     touchStartY.current = null;
     if (Math.abs(dx) < 55 || Math.abs(dy) > Math.abs(dx) * 0.9) return;
-    if (dx < 0 && selectedAnswer !== null && !isLast) goNext();
-    else if (dx > 0 && current > 0) goPrev();
+    // Swipe left → next (only if current question answered)
+    if (dx < 0 && answers[current] !== null && !isLast) {
+      navigate(current + 1, "next");
+    }
+    // Swipe right → back
+    else if (dx > 0 && current > 0) {
+      navigate(current - 1, "prev");
+    }
   };
 
   const animClass = direction === "next" ? "animate-slide-in-right" : "animate-slide-in-left";
@@ -145,7 +141,7 @@ export default function TestScreen({
       {milestone && (
         <div
           className="fixed z-50 pointer-events-none animate-milestone-pop"
-          style={{ top: "68px", left: "50%" }}
+          style={{ top: "80px", left: "50%" }}
         >
           <div
             className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-white whitespace-nowrap"
@@ -160,39 +156,47 @@ export default function TestScreen({
         </div>
       )}
 
-      {/* Sticky top bar */}
+      {/* Sticky top bar — spacious layout */}
       <div
-        className="sticky top-0 z-10 px-4 py-3 border-b"
+        className="sticky top-0 z-10 border-b"
         style={{ background: "rgba(250,246,238,0.97)", backdropFilter: "blur(10px)", borderColor: "#e2d8c8" }}
       >
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">
-              Q {current + 1} / 187
+        <div className="max-w-2xl mx-auto px-5 py-4">
+          {/* Question number + percentage */}
+          <div className="flex items-center justify-between mb-2.5">
+            <span
+              className="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full"
+              style={{ background: "#f5e6c8", color: "#c8861a" }}
+            >
+              Q {current + 1} of 187
             </span>
-            <div className="flex-1 h-2.5 rounded-full overflow-hidden" style={{ background: "#e8dfc8" }}>
-              <div
-                className="progress-fill h-full rounded-full"
-                style={{ width: `${pct}%`, background: "linear-gradient(90deg, #c8861a, #e8b84b)" }}
-              />
-            </div>
-            <span className="text-xs font-semibold whitespace-nowrap" style={{ color: "#c8861a" }}>
+            <span className="text-sm font-bold tabular-nums" style={{ color: "#c8861a" }}>
               {pct}%
             </span>
           </div>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-slate-400">
-            <span>{answeredCount} answered</span>
-            <span className="opacity-40">·</span>
+
+          {/* Progress bar — thicker */}
+          <div className="h-3 rounded-full overflow-hidden mb-3" style={{ background: "#e8dfc8" }}>
+            <div
+              className="progress-fill h-full rounded-full"
+              style={{ width: `${pct}%`, background: "linear-gradient(90deg, #c8861a, #e8b84b)" }}
+            />
+          </div>
+
+          {/* Stats row */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
+            <span className="font-medium">{answeredCount} answered</span>
+            <span className="opacity-30">|</span>
             <span>{questionsLeft} left</span>
             {startTime && elapsed > 0 && (
               <>
-                <span className="opacity-40">·</span>
+                <span className="opacity-30">|</span>
                 <span>⏱ {formatTime(elapsed)}</span>
                 {questionsLeft > 0 && (
                   <>
-                    <span className="opacity-40">·</span>
-                    <span style={{ color: "#c8861a" }}>
-                      {answeredCount > 4 ? formatMinutes(estimatedSecsLeft) : "~35 min"} remaining
+                    <span className="opacity-30">|</span>
+                    <span className="font-medium" style={{ color: "#c8861a" }}>
+                      {answeredCount > 4 ? formatMinutes(estimatedSecsLeft) : "~35 min"} left
                     </span>
                   </>
                 )}

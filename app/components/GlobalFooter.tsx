@@ -33,7 +33,7 @@ export default function GlobalFooter() {
           borderColor: "#e2d8c8",
         }}
       >
-        <div className="max-w-3xl mx-auto px-3 py-1.5 flex items-center justify-between gap-2">
+        <div className="max-w-3xl mx-auto px-5 sm:px-6 py-2 flex items-center justify-between gap-3">
           {/* Left: date */}
           <span className="text-xs text-slate-400 whitespace-nowrap">
             📅 {today}
