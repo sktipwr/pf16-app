@@ -175,21 +175,25 @@ export default function TestScreen({
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      {/* Milestone toast */}
+      {/* Milestone celebration — inline banner below header */}
       {milestone && (
-        <div
-          className="fixed z-50 pointer-events-none animate-milestone-pop"
-          style={{ top: "80px", left: "50%" }}
-        >
+        <div className="animate-milestone-slide overflow-hidden">
           <div
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-white whitespace-nowrap"
-            style={{
-              background: "linear-gradient(135deg, #c8861a, #e8b84b)",
-              boxShadow: "0 8px 32px rgba(200,134,26,0.5)",
-            }}
+            className="max-w-2xl mx-auto px-5 py-3"
           >
-            <span className="text-base">{milestone.emoji}</span>
-            {milestone.msg}
+            <div
+              className="flex items-center gap-3 px-5 py-4 rounded-2xl"
+              style={{
+                background: "linear-gradient(135deg, rgba(200,134,26,0.1), rgba(232,184,75,0.1))",
+                border: "1px solid rgba(200,134,26,0.25)",
+              }}
+            >
+              <span className="text-3xl animate-milestone-emoji">{milestone.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold" style={{ color: "#7a5a0a" }}>{milestone.msg}</p>
+                <p className="text-xs mt-0.5" style={{ color: "#9a7a2a" }}>{answeredCount} of 187 answered</p>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -259,24 +263,28 @@ export default function TestScreen({
       <div className="flex-1 flex items-start justify-center px-4 py-5 sm:py-10">
         <div className="max-w-2xl w-full">
 
-          {/* Question card stack */}
-          <div className="relative mb-4">
-            {/* Stack card 2 (deepest) */}
+          {/* Question card stack — Tinder-style left/right fan */}
+          <div className="relative mb-4" style={{ perspective: "800px" }}>
+            {/* Stack card 2 (deepest — fanned right) */}
             <div
-              className="absolute inset-x-3 top-3 h-full rounded-2xl border"
+              className="absolute inset-0 rounded-2xl border"
               style={{
-                background: "#f5efe3",
+                background: "#f2ebe0",
                 borderColor: "#ddd2c0",
-                boxShadow: "0 2px 8px rgba(15,27,45,0.04)",
+                transform: "translateX(8px) rotate(2.5deg)",
+                transformOrigin: "center bottom",
+                boxShadow: "0 2px 8px rgba(15,27,45,0.05)",
               }}
             />
-            {/* Stack card 1 (middle) */}
+            {/* Stack card 1 (middle — fanned left) */}
             <div
-              className="absolute inset-x-1.5 top-1.5 h-full rounded-2xl border"
+              className="absolute inset-0 rounded-2xl border"
               style={{
-                background: "#faf5eb",
+                background: "#f8f2e8",
                 borderColor: "#e2d8c8",
-                boxShadow: "0 2px 12px rgba(15,27,45,0.05)",
+                transform: "translateX(-5px) rotate(-1.5deg)",
+                transformOrigin: "center bottom",
+                boxShadow: "0 2px 12px rgba(15,27,45,0.06)",
               }}
             />
             {/* Active card — direction-aware slide animation */}
