@@ -16,6 +16,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
@@ -25,7 +26,6 @@ html, body {
   min-height: 100vh;
 }
 
-/* Warm patterned background */
 body {
   background-image:
     radial-gradient(circle at 15% 10%, rgba(200, 134, 26, 0.06) 0%, transparent 40%),
@@ -33,57 +33,87 @@ body {
     url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0z' fill='none'/%3E%3Ccircle cx='30' cy='30' r='0.5' fill='%23c8861a' opacity='0.12'/%3E%3C/svg%3E");
 }
 
+/* ── Entrance animations ── */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(22px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeIn {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
+  from { opacity: 0; transform: scale(0.93); }
   to   { opacity: 1; transform: scale(1); }
 }
+.animate-fade-up  { animation: fadeUp  0.45s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.animate-fade-in  { animation: fadeIn  0.30s ease both; }
+.animate-scale-in { animation: scaleIn 0.40s cubic-bezier(0.4, 0, 0.2, 1) both; }
 
-.animate-fade-up {
-  animation: fadeUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+/* ── Question slide transitions ── */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(52px) scale(0.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-52px) scale(0.97); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+.animate-slide-in-right { animation: slideInRight 0.28s cubic-bezier(0.34, 1.2, 0.64, 1) both; }
+.animate-slide-in-left  { animation: slideInLeft  0.28s cubic-bezier(0.34, 1.2, 0.64, 1) both; }
+
+/* ── Answer selection interactions ── */
+@keyframes optionPop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(0.963); }
+  70%  { transform: scale(1.028); }
+  100% { transform: scale(1); }
+}
+.animate-option-pop { animation: optionPop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+@keyframes checkBounce {
+  0%   { transform: scale(0) rotate(-15deg); opacity: 0; }
+  55%  { transform: scale(1.4) rotate(6deg);  opacity: 1; }
+  100% { transform: scale(1) rotate(0deg);    opacity: 1; }
+}
+.animate-check-bounce {
+  display: inline-block;
+  animation: checkBounce 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.3s ease both;
+/* ── Milestone achievement toast ── */
+@keyframes milestonePop {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(-14px) scale(0.86); }
+  18%  { opacity: 1; transform: translateX(-50%) translateY(2px) scale(1.05); }
+  28%  {             transform: translateX(-50%) translateY(0) scale(1); }
+  75%  { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-8px) scale(0.93); }
 }
+.animate-milestone-pop { animation: milestonePop 3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
-.animate-scale-in {
-  animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
+/* ── Progress bar ── */
+.progress-fill { transition: width 0.55s cubic-bezier(0.4, 0, 0.2, 1); }
 
-/* Progress bar fill animation */
-.progress-fill {
-  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Option button hover */
+/* ── Option buttons ── */
 .option-btn {
-  transition: all 0.18s ease;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
 }
+.option-btn:active { transform: scale(0.968) !important; }
 
-.option-btn:hover {
-  transform: translateX(4px);
+/* ── Score bars ── */
+@keyframes growWidth { from { width: 0; } }
+.score-bar-fill { animation: growWidth 1s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+/* ── WhatsApp button pulse ── */
+@keyframes waPulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.45); }
+  50%       { box-shadow: 0 4px 30px rgba(37,211,102,0.70), 0 0 0 8px rgba(37,211,102,0.08); }
 }
+.wa-pulse { animation: waPulse 2.4s ease-in-out infinite; }
 
-/* Score bar animation */
-.score-bar-fill {
-  animation: growWidth 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
-@keyframes growWidth {
-  from { width: 0; }
-}
-
-/* Print styles */
+/* ── Print ── */
 @media print {
   body { background: white; }
   .no-print { display: none !important; }

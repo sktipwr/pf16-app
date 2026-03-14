@@ -82,7 +82,7 @@ export default function GlobalFooter() {
         href="https://wa.me/919540494104?text=Hi%2C%20I%20have%20feedback%2Fbug%20report%20for%20the%2016PF%20app%3A"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed z-50 flex items-center gap-2 rounded-full shadow-lg transition-all hover:scale-105 active:scale-95"
+        className="wa-pulse fixed z-50 flex items-center gap-2 rounded-full transition-all hover:scale-105 active:scale-95"
         style={{
           bottom: "52px",
           right: "16px",

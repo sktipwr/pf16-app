@@ -18,7 +18,10 @@
       "Bash(awk '/SCORING_MAP/,/^};/' /Users/sktipwr/Downloads/pf16-app/app/lib/questions.ts)",
       "Bash(npm install:*)",
       "mcp__Claude_Preview__preview_start",
-      "mcp__757a0883-5020-4b86-ba63-5f9288bcccd2__get_project"
+      "mcp__757a0883-5020-4b86-ba63-5f9288bcccd2__get_project",
+      "Bash(npx next:*)",
+      "Bash(git -C /Users/sktipwr/Downloads/pf16-app add -A)",
+      "Bash(git -C:*)"
     ]
   }
 }
