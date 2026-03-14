@@ -94,6 +94,12 @@ body {
 /* ── Progress bar ── */
 .progress-fill { transition: width 0.55s cubic-bezier(0.4, 0, 0.2, 1); }
 
+/* ── Transition fill (auto-advance indicator) ── */
+@keyframes transitionFill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
 /* ── Option buttons ── */
 .option-btn {
   transition: all 0.2s ease;

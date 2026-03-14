@@ -240,7 +240,7 @@ export default function TestScreen({
                   <>
                     <span style={{ color: "#c4b89a" }}>|</span>
                     <span className="font-semibold" style={{ color: "#9a6e1f" }}>
-                      {answeredCount > 4 ? formatMinutes(estimatedSecsLeft) : "~35 min"} left
+                      {answeredCount > 4 ? formatMinutes(estimatedSecsLeft) : "~35 min"} est.
                     </span>
                   </>
                 )}
@@ -322,6 +322,19 @@ export default function TestScreen({
                 );
               })}
             </div>
+          </div>
+
+          {/* Transition progress bar — visible during auto-advance */}
+          <div className="h-1.5 rounded-full overflow-hidden mb-3" style={{ background: transitioning ? "#e0d6c2" : "transparent" }}>
+            {transitioning && (
+              <div
+                className="h-full rounded-full"
+                style={{
+                  background: "linear-gradient(90deg, #c8861a, #e8b84b)",
+                  animation: "transitionFill 650ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
+                }}
+              />
+            )}
           </div>
 
           {/* Navigation */}
