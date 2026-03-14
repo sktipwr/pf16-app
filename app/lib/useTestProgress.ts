@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const STORAGE_KEY = "16pf_progress_v1";
 
@@ -19,46 +19,53 @@ const DEFAULT_PROGRESS: TestProgress = {
 export function useTestProgress() {
   const [progress, setProgress] = useState<TestProgress>(DEFAULT_PROGRESS);
   const [loaded, setLoaded] = useState(false);
+  const progressRef = useRef<TestProgress>(DEFAULT_PROGRESS);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        setProgress(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        setProgress(parsed);
+        progressRef.current = parsed;
       }
     } catch {}
     setLoaded(true);
   }, []);
 
-  const saveProgress = (p: TestProgress) => {
+  const saveProgress = useCallback((p: TestProgress) => {
+    progressRef.current = p;
     setProgress(p);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
     } catch {}
-  };
+  }, []);
 
-  const setAnswer = (questionIndex: number, answerIndex: number) => {
-    const next = { ...progress, answers: [...progress.answers] };
+  const setAnswer = useCallback((questionIndex: number, answerIndex: number) => {
+    const latest = progressRef.current;
+    const next = { ...latest, answers: [...latest.answers] };
     next.answers[questionIndex] = answerIndex;
     saveProgress(next);
-  };
+  }, [saveProgress]);
 
-  const setCurrentQuestion = (idx: number) => {
-    saveProgress({ ...progress, currentQuestion: idx });
-  };
+  const setCurrentQuestion = useCallback((idx: number) => {
+    const latest = progressRef.current;
+    saveProgress({ ...latest, currentQuestion: idx });
+  }, [saveProgress]);
 
-  const completeTest = () => {
-    saveProgress({ ...progress, completedAt: new Date().toISOString() });
-  };
+  const completeTest = useCallback(() => {
+    const latest = progressRef.current;
+    saveProgress({ ...latest, completedAt: new Date().toISOString() });
+  }, [saveProgress]);
 
-  const resetProgress = () => {
+  const resetProgress = useCallback(() => {
     const fresh: TestProgress = {
       answers: new Array(187).fill(null),
       currentQuestion: 0,
       startedAt: new Date().toISOString(),
     };
     saveProgress(fresh);
-  };
+  }, [saveProgress]);
 
   const answeredCount = progress.answers.filter((a) => a !== null).length;
   const isComplete = answeredCount === 187;

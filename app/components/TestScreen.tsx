@@ -43,10 +43,24 @@ const OPTION_COLORS = [
   { bg: "#f0faf4", border: "#6db88a", text: "#1f6b3e", dot: "#4a7c59", glow: "rgba(74,124,89,0.18)" },
 ];
 
+/*
+ * Rich milestone system — varied messages at thoughtful intervals.
+ * Mix of: encouragements, personality fun-facts, progress celebrations.
+ * Spread so they never feel repetitive.
+ */
 const MILESTONES = [
-  { at: 47,  emoji: "🎯", msg: "25% done — great pace!" },
-  { at: 94,  emoji: "🔥", msg: "Halfway there — keep going!" },
-  { at: 140, emoji: "⚡", msg: "75% done — almost there!" },
+  { at: 10,  emoji: "👏", msg: "Great start! You're finding your rhythm." },
+  { at: 25,  emoji: "💡", msg: "Fun fact: 16PF measures traits most people aren't aware of." },
+  { at: 47,  emoji: "🎯", msg: "25% done — a quarter of the way!" },
+  { at: 65,  emoji: "🧠", msg: "Your answers are shaping a unique personality profile." },
+  { at: 80,  emoji: "💪", msg: "You're doing great — trust your instincts." },
+  { at: 94,  emoji: "🔥", msg: "Halfway there! The finish line is in sight." },
+  { at: 110, emoji: "🌟", msg: "Over 110 done — most people don't get this far!" },
+  { at: 130, emoji: "🚀", msg: "Your profile is really taking shape now." },
+  { at: 140, emoji: "⚡", msg: "75% complete — you're in the home stretch!" },
+  { at: 160, emoji: "🏆", msg: "Only 27 to go — you've got this!" },
+  { at: 175, emoji: "🎉", msg: "Almost there — just 12 more questions!" },
+  { at: 185, emoji: "✨", msg: "2 more! Your results are nearly ready." },
 ];
 
 export default function TestScreen({
@@ -57,10 +71,12 @@ export default function TestScreen({
   const [direction, setDirection] = useState<"next" | "prev">("next");
   const [justSelected, setJustSelected] = useState<number | null>(null);
   const [milestone, setMilestone] = useState<typeof MILESTONES[0] | null>(null);
+  const [transitioning, setTransitioning] = useState(false);
 
-  const prevAnsweredRef = useRef(answers.filter((a) => a !== null).length);
-  const touchStartX     = useRef<number | null>(null);
-  const touchStartY     = useRef<number | null>(null);
+  const prevAnsweredRef  = useRef(answers.filter((a) => a !== null).length);
+  const autoAdvTimer     = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const touchStartX      = useRef<number | null>(null);
+  const touchStartY      = useRef<number | null>(null);
 
   const elapsed        = useTimer(startTime ?? null);
   const q              = QUESTIONS[current];
@@ -84,7 +100,14 @@ export default function TestScreen({
     }
   }, [answers]);
 
+  // Cleanup on unmount
+  useEffect(() => () => {
+    if (autoAdvTimer.current) clearTimeout(autoAdvTimer.current);
+  }, []);
+
   const navigate = useCallback((to: number, dir: "next" | "prev") => {
+    if (autoAdvTimer.current) clearTimeout(autoAdvTimer.current);
+    setTransitioning(false);
     setDirection(dir);
     setCurrent(to);
     setAnimKey((k) => k + 1);
@@ -104,8 +127,20 @@ export default function TestScreen({
   }, [current, navigate]);
 
   const selectAnswer = (idx: number) => {
+    // Block taps during transition to prevent double-firing
+    if (transitioning) return;
+
     onAnswer(current, idx);
     setJustSelected(idx);
+
+    // Gentle auto-advance: user sees their selection for 650ms, then slides to next
+    if (!isLast) {
+      setTransitioning(true);
+      autoAdvTimer.current = setTimeout(() => {
+        setTransitioning(false);
+        navigate(current + 1, "next");
+      }, 650);
+    }
   };
 
   // Swipe gesture support
@@ -120,12 +155,9 @@ export default function TestScreen({
     touchStartX.current = null;
     touchStartY.current = null;
     if (Math.abs(dx) < 55 || Math.abs(dy) > Math.abs(dx) * 0.9) return;
-    // Swipe left → next (only if current question answered)
     if (dx < 0 && answers[current] !== null && !isLast) {
       navigate(current + 1, "next");
-    }
-    // Swipe right → back
-    else if (dx > 0 && current > 0) {
+    } else if (dx > 0 && current > 0) {
       navigate(current - 1, "prev");
     }
   };
@@ -254,6 +286,7 @@ export default function TestScreen({
                   <button
                     key={i}
                     onClick={() => selectAnswer(i)}
+                    disabled={transitioning}
                     className={`option-btn w-full flex items-center gap-3 p-4 rounded-2xl border-2 text-left${justTapped ? " animate-option-pop" : ""}`}
                     style={{
                       background:  selected ? col.bg : "white",
@@ -261,6 +294,7 @@ export default function TestScreen({
                       boxShadow:   selected ? `0 6px 22px ${col.glow}` : "0 1px 4px rgba(0,0,0,0.04)",
                       transform:   selected ? "scale(1.012)" : "scale(1)",
                       transition:  "all 0.22s cubic-bezier(0.34, 1.3, 0.64, 1)",
+                      opacity:     transitioning && !selected ? 0.5 : 1,
                     }}
                   >
                     {/* Circle letter / checkmark */}
@@ -294,7 +328,7 @@ export default function TestScreen({
           <div className="flex gap-3 mb-5">
             <button
               onClick={goPrev}
-              disabled={current === 0}
+              disabled={current === 0 || transitioning}
               className="px-5 py-3.5 rounded-xl border text-sm font-semibold transition-all disabled:opacity-25 active:scale-95"
               style={{ borderColor: "#e2d8c8", color: "#334155", background: "white" }}
             >
