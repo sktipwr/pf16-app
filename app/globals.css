@@ -130,6 +130,7 @@ body {
 }
 .wa-pulse { animation: waPulse 2.4s ease-in-out infinite; }
 
+
 /* ── Print ── */
 @media print {
   body { background: white; }

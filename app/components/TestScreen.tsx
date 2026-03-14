@@ -171,7 +171,7 @@ export default function TestScreen({
       autoAdvTimer.current = setTimeout(() => {
         setTransitioning(false);
         navigate(current + 1, "next");
-      }, 1300);
+      }, 2000);
     }
   };
 
@@ -348,7 +348,7 @@ export default function TestScreen({
 
           {/* Question card stack — Tinder-style left/right fan */}
           <div className="relative mb-4" style={{ perspective: "800px" }}>
-            {/* Stack card 2 (deepest — fanned right) */}
+            {/* Stack card 2 (deepest — decorative fanned right) */}
             <div
               className="absolute inset-0 rounded-2xl border"
               style={{
@@ -359,17 +359,63 @@ export default function TestScreen({
                 boxShadow: "0 2px 8px rgba(15,27,45,0.05)",
               }}
             />
-            {/* Stack card 1 (middle — fanned left) */}
-            <div
-              className="absolute inset-0 rounded-2xl border"
-              style={{
-                background: "#f8f2e8",
-                borderColor: "#e2d8c8",
-                transform: "translateX(-5px) rotate(-1.5deg)",
-                transformOrigin: "center bottom",
-                boxShadow: "0 2px 12px rgba(15,27,45,0.06)",
-              }}
-            />
+            {/* Stack card 1 (middle — shows next/prev question peek) */}
+            {(() => {
+              const peekIdx = isDragging && dragX > 0
+                ? (current > 0 ? current - 1 : null)
+                : (current < 186 ? current + 1 : null);
+              const peekQ = peekIdx !== null ? QUESTIONS[peekIdx] : null;
+              return (
+                <div
+                  className="absolute inset-0 rounded-2xl border p-5 sm:p-8 overflow-hidden"
+                  style={{
+                    background: "#faf6ee",
+                    borderColor: "#e2d8c8",
+                    transform: "translateX(-3px) rotate(-1deg)",
+                    transformOrigin: "center bottom",
+                    boxShadow: "0 2px 12px rgba(15,27,45,0.06)",
+                  }}
+                >
+                  {peekQ && (
+                    <>
+                      <div className="flex items-center gap-2 mb-4">
+                        <span
+                          className="text-xs font-semibold tracking-widest uppercase px-3 py-1 rounded-full"
+                          style={{ background: "#f0e6d0", color: "#b8913a" }}
+                        >
+                          Question {String((peekIdx ?? 0) + 1).padStart(3, "0")}
+                        </span>
+                      </div>
+                      <p
+                        className="font-serif text-lg sm:text-xl leading-relaxed mb-6"
+                        style={{ fontFamily: "Lora, Georgia, serif", color: "#5a4a32", opacity: 0.7 }}
+                      >
+                        {peekQ.text}
+                      </p>
+                      <div className="space-y-2.5">
+                        {peekQ.options.map((opt, i) => (
+                          <div
+                            key={i}
+                            className="flex items-center gap-3 p-4 rounded-2xl border-2"
+                            style={{ background: "white", borderColor: "#e8e0d0", opacity: 0.5 }}
+                          >
+                            <div
+                              className="flex-shrink-0 w-9 h-9 rounded-full border-2 flex items-center justify-center text-sm font-bold"
+                              style={{ borderColor: "#d0c8b8", color: "#8a7f6e" }}
+                            >
+                              {OPTION_LABELS[i]}
+                            </div>
+                            <span className="text-sm leading-snug flex-1 font-medium" style={{ color: "#8a7f6e" }}>
+                              {opt}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })()}
             {/* Active card — draggable */}
             <div
               ref={cardRef}
@@ -467,7 +513,7 @@ export default function TestScreen({
                 className="h-full rounded-full"
                 style={{
                   background: "linear-gradient(90deg, #c8861a, #e8b84b)",
-                  animation: "transitionFill 1300ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
+                  animation: "transitionFill 2000ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
                 }}
               />
             )}

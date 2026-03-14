@@ -269,91 +269,174 @@ export default function WelcomeScreen({
 
 /* ── New user welcome ── */
 function NewUserWelcome({ onStart }: { onStart: () => void }) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  const [showInstructions, setShowInstructions] = useState(false);
 
-  const c187 = useCountUp(mounted ? 187 : 0, 900);
-  const c35  = useCountUp(mounted ? 35  : 0, 700);
-  const c16  = useCountUp(mounted ? 16  : 0, 550);
+  if (showInstructions) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 py-12 pb-24">
+        <div className="max-w-xl w-full">
+          <div className="text-center mb-6 animate-fade-up">
+            <div
+              className="w-12 h-12 rounded-full flex items-center justify-center text-xl mx-auto mb-4"
+              style={{ background: "#fdf4e3", border: "2px solid #e8c97a" }}
+            >
+              📝
+            </div>
+            <h2
+              className="text-2xl sm:text-3xl font-bold mb-2"
+              style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "#0f1b2d" }}
+            >
+              Quick Tips
+            </h2>
+            <p className="text-sm text-slate-500">Keep these in mind as you go</p>
+          </div>
+
+          <div
+            className="rounded-2xl p-5 sm:p-6 mb-6 border animate-fade-up"
+            style={{ background: "white", borderColor: "#e2d8c8", animationDelay: "0.08s" }}
+          >
+            <ol className="space-y-4">
+              {[
+                { icon: "⚡", tip: "Go with your gut — your first instinct is usually the most accurate." },
+                { icon: "⚖️", tip: "Avoid the middle \"uncertain\" option unless you truly can't decide." },
+                { icon: "✅", tip: "Answer every question — a best guess beats a skip." },
+                { icon: "🪞", tip: "Be honest. There are no right or wrong answers — just you." },
+              ].map((item, i) => (
+                <li key={i} className="flex gap-3 text-sm text-slate-600 leading-relaxed">
+                  <span
+                    className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-base"
+                    style={{ background: "#f5e6c8" }}
+                  >
+                    {item.icon}
+                  </span>
+                  <span className="pt-1">{item.tip}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <button
+            onClick={onStart}
+            className="w-full py-4 sm:py-5 rounded-2xl text-base sm:text-lg font-semibold transition-all hover:opacity-90 active:scale-[0.98] animate-fade-up"
+            style={{ background: "linear-gradient(135deg, #0f1b2d, #1a2d45)", color: "white", animationDelay: "0.16s", boxShadow: "0 8px 32px rgba(15,27,45,0.25)" }}
+          >
+            I&apos;m Ready — Let&apos;s Go →
+          </button>
+
+          <button
+            onClick={() => setShowInstructions(false)}
+            className="w-full py-3 text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors mt-3 animate-fade-up"
+            style={{ animationDelay: "0.22s" }}
+          >
+            ← Back
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12 pb-24">
-      <div className="max-w-xl w-full">
+    <div className="min-h-screen flex flex-col px-5 pt-8 pb-16">
+      <div className="max-w-lg mx-auto w-full flex-1 flex flex-col">
 
-        <div className="text-center mb-8 animate-fade-up">
-          <div
-            className="inline-flex items-center gap-2 border text-xs font-semibold tracking-widest uppercase px-4 py-2 rounded-full mb-6"
-            style={{ background: "#fdf4e3", borderColor: "#e8c97a", color: "#9a6e1f" }}
-          >
-            <span>◆</span> Personality Assessment <span>◆</span>
-          </div>
+        {/* Hero */}
+        <div className="text-center mb-5 animate-fade-up">
           <h1
-            className="font-serif text-4xl sm:text-5xl font-bold leading-tight mb-4"
+            className="text-2xl sm:text-3xl font-bold leading-tight mb-1.5"
             style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "#0f1b2d" }}
           >
-            16 Personality<br />
-            <span style={{ color: "#c8861a" }}>Factors</span>
+            Discover Your <span style={{ color: "#c8861a" }}>True Personality</span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-500 max-w-md mx-auto leading-relaxed">
-            A comprehensive psychological assessment measuring 16 core dimensions of your personality, developed by Raymond Cattell.
+          <p className="text-xs sm:text-sm text-slate-400">
+            Trusted by psychologists worldwide since 1949
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-3 mb-7">
+        {/* Stats row */}
+        <div
+          className="flex items-center justify-center gap-6 sm:gap-10 mb-5 animate-fade-up"
+          style={{ animationDelay: "0.06s" }}
+        >
           {[
-            { icon: "📋", value: c187,       label: "Questions", delay: "0.08s" },
-            { icon: "⏱",  value: `~${c35}`, label: "Minutes",   delay: "0.14s" },
-            { icon: "🔬", value: c16,        label: "Factors",   delay: "0.20s" },
+            { value: "187", label: "Questions" },
+            { value: "~35", label: "Minutes" },
+            { value: "16", label: "Factors" },
           ].map((s) => (
-            <div
-              key={s.label}
-              className="rounded-2xl p-4 text-center border animate-fade-up"
-              style={{ background: "white", borderColor: "#e2d8c8", boxShadow: "0 2px 14px rgba(15,27,45,0.05)", animationDelay: s.delay }}
-            >
-              <div className="text-xl sm:text-2xl mb-1">{s.icon}</div>
-              <div className="font-serif text-2xl sm:text-3xl font-bold mb-0.5 tabular-nums" style={{ color: "#c8861a", fontFamily: "'DM Serif Display', serif" }}>
+            <div key={s.label} className="text-center">
+              <div className="text-xl sm:text-2xl font-bold tabular-nums" style={{ color: "#c8861a", fontFamily: "'DM Serif Display', serif" }}>
                 {s.value}
               </div>
-              <div className="text-xs text-slate-400 uppercase tracking-wide font-medium">{s.label}</div>
+              <div className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">{s.label}</div>
             </div>
           ))}
         </div>
 
-        <div
-          className="rounded-2xl p-5 sm:p-6 mb-6 border animate-fade-up"
-          style={{ background: "white", borderColor: "#e2d8c8", animationDelay: "0.22s" }}
-        >
-          <h3 className="font-serif font-semibold text-base mb-4" style={{ color: "#0f1b2d", fontFamily: "'DM Serif Display', serif" }}>
-            Before you begin
-          </h3>
-          <ol className="space-y-3">
-            {[
-              "Give your first, natural answer — don't overthink.",
-              "Avoid the middle \"uncertain\" option except when truly necessary.",
-              "Answer every question — give your best guess if unsure.",
-              "Be honest. There are no right or wrong answers.",
-            ].map((tip, i) => (
-              <li key={i} className="flex gap-3 text-sm text-slate-600 leading-relaxed">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold mt-0.5" style={{ background: "#f5e6c8", color: "#c8861a" }}>
-                  {i + 1}
-                </span>
-                <span>{tip}</span>
-              </li>
-            ))}
-          </ol>
+        {/* What / Why / What you get — single-line icon cards */}
+        <div className="space-y-2.5 mb-5">
+          {[
+            { icon: "🧬", title: "What is 16PF?", desc: "A science-backed test measuring 16 core personality traits.", delay: "0.10s" },
+            { icon: "🎯", title: "Why take it?", desc: "Know your strengths, blind spots, and what drives you.", delay: "0.14s" },
+            { icon: "📊", title: "What you\u2019ll get", desc: "A detailed free report with visual charts and trait insights.", delay: "0.18s" },
+          ].map((card) => (
+            <div
+              key={card.title}
+              className="rounded-xl px-4 py-3 border animate-fade-up"
+              style={{ background: "white", borderColor: "#e2d8c8", animationDelay: card.delay }}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-xl flex-shrink-0">{card.icon}</span>
+                <div className="min-w-0">
+                  <h3 className="text-[13px] font-bold" style={{ color: "#0f1b2d" }}>{card.title}</h3>
+                  <p className="text-[12px] text-slate-400 leading-snug">{card.desc}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        <button
-          onClick={onStart}
-          className="w-full py-4 sm:py-5 rounded-2xl text-base sm:text-lg font-semibold transition-all hover:opacity-90 active:scale-[0.98] animate-fade-up"
-          style={{ background: "linear-gradient(135deg, #0f1b2d, #1a2d45)", color: "white", animationDelay: "0.30s", boxShadow: "0 8px 32px rgba(15,27,45,0.25)" }}
+        {/* How it works — 3 steps */}
+        <div
+          className="grid grid-cols-3 gap-2 mb-5 animate-fade-up"
+          style={{ animationDelay: "0.20s" }}
         >
-          Begin Assessment →
-        </button>
+          {[
+            { step: "1", label: "Take the Test", desc: "Answer 187 questions honestly", color: "#c8861a" },
+            { step: "2", label: "View Results", desc: "Get your 16-factor profile", color: "#4a7c59" },
+            { step: "3", label: "Grow", desc: "Understand yourself better", color: "#4a6dd4" },
+          ].map((s) => (
+            <div
+              key={s.step}
+              className="rounded-xl p-3 border text-center"
+              style={{ background: "white", borderColor: "#e2d8c8" }}
+            >
+              <div
+                className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold mx-auto mb-1.5"
+                style={{ background: s.color, color: "white" }}
+              >
+                {s.step}
+              </div>
+              <h4 className="text-[12px] font-bold mb-0.5" style={{ color: "#0f1b2d" }}>{s.label}</h4>
+              <p className="text-[10px] text-slate-400 leading-snug">{s.desc}</p>
+            </div>
+          ))}
+        </div>
 
-        <p className="text-center text-xs text-slate-400 mt-4">
-          Your progress is automatically saved to your browser
-        </p>
+        {/* CTA */}
+        <div className="animate-fade-up" style={{ animationDelay: "0.22s" }}>
+          <button
+            onClick={() => setShowInstructions(true)}
+            className="w-full py-4 rounded-2xl text-base font-semibold transition-all hover:opacity-90 active:scale-[0.98]"
+            style={{ background: "linear-gradient(135deg, #0f1b2d, #1a2d45)", color: "white", boxShadow: "0 8px 32px rgba(15,27,45,0.3)" }}
+          >
+            Start Assessment →
+          </button>
+          <p className="text-center text-[11px] text-slate-400 mt-2">
+            Free · No sign-up · Progress saved automatically
+          </p>
+        </div>
+
+
+
       </div>
     </div>
   );
