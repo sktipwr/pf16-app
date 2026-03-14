@@ -21,13 +21,6 @@ export default function Home() {
   const [screen, setScreen] = useState<Screen>("welcome");
   const [testStartTime, setTestStartTime] = useState<number | null>(null);
 
-  // If test was already completed last session, go straight to report
-  useEffect(() => {
-    if (loaded && progress.completedAt) {
-      setScreen("report");
-    }
-  }, [loaded]);
-
   // On mount: increment visit counter
   useEffect(() => {
     if (!loaded) return;
@@ -57,6 +50,14 @@ export default function Home() {
     setScreen("welcome");
   };
 
+  const handleHome = () => {
+    setScreen("welcome");
+  };
+
+  const handleViewReport = () => {
+    setScreen("report");
+  };
+
   if (!loaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -71,8 +72,11 @@ export default function Home() {
         <WelcomeScreen
           onStart={handleStart}
           onResume={handleResume}
-          hasProgress={answeredCount > 0}
+          onViewReport={handleViewReport}
+          hasProgress={answeredCount > 0 && !progress.completedAt}
+          isCompleted={!!progress.completedAt}
           answeredCount={answeredCount}
+          answers={progress.answers}
         />
       )}
       {screen === "test" && (
@@ -82,6 +86,7 @@ export default function Home() {
           onAnswer={(qi, ai) => setAnswer(qi, ai)}
           onNavigate={(idx) => setCurrentQuestion(idx)}
           onComplete={handleComplete}
+          onHome={handleHome}
           startTime={testStartTime}
         />
       )}

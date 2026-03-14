@@ -32,6 +32,7 @@ interface TestScreenProps {
   onAnswer: (questionIndex: number, answerIndex: number) => void;
   onNavigate: (idx: number) => void;
   onComplete: () => void;
+  onHome: () => void;
   startTime?: number | null;
 }
 
@@ -49,7 +50,7 @@ const MILESTONES = [
 ];
 
 export default function TestScreen({
-  answers, initialQuestion, onAnswer, onNavigate, onComplete, startTime
+  answers, initialQuestion, onAnswer, onNavigate, onComplete, onHome, startTime
 }: TestScreenProps) {
   const [current, setCurrent]     = useState(initialQuestion);
   const [animKey, setAnimKey]     = useState(0);
@@ -156,46 +157,57 @@ export default function TestScreen({
         </div>
       )}
 
-      {/* Sticky top bar — spacious layout */}
+      {/* Sticky top bar */}
       <div
         className="sticky top-0 z-10 border-b"
         style={{ background: "rgba(250,246,238,0.97)", backdropFilter: "blur(10px)", borderColor: "#e2d8c8" }}
       >
         <div className="max-w-2xl mx-auto px-5 py-4">
-          {/* Question number + percentage */}
-          <div className="flex items-center justify-between mb-2.5">
+          {/* Row 1: Home icon + question badge + percentage */}
+          <div className="flex items-center gap-3 mb-2.5">
+            <button
+              onClick={onHome}
+              className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all active:scale-90"
+              style={{ background: "#f0e8d8" }}
+              title="Home"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5a4a32" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </button>
             <span
               className="text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full"
-              style={{ background: "#f5e6c8", color: "#c8861a" }}
+              style={{ background: "#0f1b2d", color: "#e8dfc8" }}
             >
               Q {current + 1} of 187
             </span>
-            <span className="text-sm font-bold tabular-nums" style={{ color: "#c8861a" }}>
+            <span className="ml-auto text-sm font-bold tabular-nums" style={{ color: "#0f1b2d" }}>
               {pct}%
             </span>
           </div>
 
-          {/* Progress bar — thicker */}
-          <div className="h-3 rounded-full overflow-hidden mb-3" style={{ background: "#e8dfc8" }}>
+          {/* Progress bar */}
+          <div className="h-3 rounded-full overflow-hidden mb-3" style={{ background: "#e0d6c2" }}>
             <div
               className="progress-fill h-full rounded-full"
               style={{ width: `${pct}%`, background: "linear-gradient(90deg, #c8861a, #e8b84b)" }}
             />
           </div>
 
-          {/* Stats row */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
-            <span className="font-medium">{answeredCount} answered</span>
-            <span className="opacity-30">|</span>
+          {/* Stats row — dark readable text */}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs" style={{ color: "#5a4a32" }}>
+            <span className="font-semibold">{answeredCount} answered</span>
+            <span style={{ color: "#c4b89a" }}>|</span>
             <span>{questionsLeft} left</span>
             {startTime && elapsed > 0 && (
               <>
-                <span className="opacity-30">|</span>
+                <span style={{ color: "#c4b89a" }}>|</span>
                 <span>⏱ {formatTime(elapsed)}</span>
                 {questionsLeft > 0 && (
                   <>
-                    <span className="opacity-30">|</span>
-                    <span className="font-medium" style={{ color: "#c8861a" }}>
+                    <span style={{ color: "#c4b89a" }}>|</span>
+                    <span className="font-semibold" style={{ color: "#9a6e1f" }}>
                       {answeredCount > 4 ? formatMinutes(estimatedSecsLeft) : "~35 min"} left
                     </span>
                   </>
