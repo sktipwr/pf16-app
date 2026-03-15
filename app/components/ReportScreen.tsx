@@ -2,15 +2,17 @@
 import { useMemo, useEffect, useState } from "react";
 import { computeScores } from "../lib/scoring";
 import { QUESTIONS } from "../lib/questions";
+import type { UserInfo } from "../lib/useTestProgress";
 
 interface ReportProps {
   answers: (number | null)[];
   onRetake: () => void;
+  userInfo?: UserInfo;
 }
 
 const LEVEL_COLORS = {
   low:  { bg: "#fef0f0", border: "#e07070", text: "#8b2020", bar: "#e07070", label: "Low" },
-  mid:  { bg: "#fef9ec", border: "#d4a843", text: "#7a5a0a", bar: "#d4a843", label: "Mid" },
+  mid:  { bg: "#fef9ec", border: "#d4a843", text: "#7a5a0a", bar: "#d4a843", label: "Average" },
   high: { bg: "#f0f9f4", border: "#6db88a", text: "#1f6b3e", bar: "#6db88a", label: "High" },
 };
 
@@ -34,13 +36,13 @@ function useCountUp(target: number, duration = 800, delayMs = 0) {
   return count;
 }
 
-function AnimatedPct({ value, delay }: { value: number; delay: number }) {
+function AnimatedSten({ value, delay }: { value: number; delay: number }) {
   const n = useCountUp(value, 700, delay);
-  return <>{n}%</>;
+  return <>{n}</>;
 }
 
-export default function ReportScreen({ answers, onRetake }: ReportProps) {
-  const scores        = useMemo(() => computeScores(answers), [answers]);
+export default function ReportScreen({ answers, onRetake, userInfo }: ReportProps) {
+  const scores        = useMemo(() => computeScores(answers, userInfo?.gender), [answers, userInfo]);
   const answeredCount = answers.filter((a) => a !== null).length;
   const skippedCount  = 187 - answeredCount;
   const completion    = Math.round((answeredCount / 187) * 100);
@@ -84,10 +86,13 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
             className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold mb-3"
             style={{ fontFamily: "'DM Serif Display', Georgia, serif", color: "#0f1b2d" }}
           >
-            Your Personality Report
+            {userInfo ? `${userInfo.name}'s Report` : "Your Personality Report"}
           </h1>
           <p className="text-slate-500 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
-            Based on your responses to the 16PF questionnaire. Scores reflect relative tendencies — there are no good or bad results.
+            {userInfo
+              ? `Scored using ${userInfo.gender === "male" ? "male" : "female"} population norms (age ${userInfo.age}). Sten scores range from 1 (low) to 10 (high).`
+              : "Based on your responses to the 16PF questionnaire. Scores reflect relative tendencies — there are no good or bad results."
+            }
           </p>
         </div>
 
@@ -130,18 +135,18 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
               {highScores.map((s) => (
                 <div key={s.factor.id} className="flex gap-3 p-3 rounded-xl" style={{ background: "#f0f9f4", border: "1px solid #a8d5b0" }}>
                   <span className="text-lg">↑</span>
-                  <div>
+                  <div className="flex-1">
                     <div className="font-semibold text-sm" style={{ color: "#1f6b3e" }}>High {s.factor.label}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">{s.factor.highPole}</div>
+                    <div className="text-xs text-slate-500 mt-0.5">{s.factor.highPole} · Sten {s.stenScore}/10</div>
                   </div>
                 </div>
               ))}
               {lowScores.map((s) => (
                 <div key={s.factor.id} className="flex gap-3 p-3 rounded-xl" style={{ background: "#fef9ec", border: "1px solid #e8d090" }}>
                   <span className="text-lg">↓</span>
-                  <div>
+                  <div className="flex-1">
                     <div className="font-semibold text-sm" style={{ color: "#7a5a0a" }}>Low {s.factor.label}</div>
-                    <div className="text-xs text-slate-500 mt-0.5">{s.factor.lowPole}</div>
+                    <div className="text-xs text-slate-500 mt-0.5">{s.factor.lowPole} · Sten {s.stenScore}/10</div>
                   </div>
                 </div>
               ))}
@@ -161,6 +166,8 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
             {scores.map((s, idx) => {
               const col   = LEVEL_COLORS[s.level];
               const delay = 0.22 + idx * 0.03;
+              // Map sten 1-10 to percentage for bar width
+              const barPct = ((s.stenScore - 1) / 9) * 100;
               return (
                 <div
                   key={s.factor.id}
@@ -197,7 +204,8 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
                         className="font-serif text-xl sm:text-2xl font-bold tabular-nums"
                         style={{ fontFamily: "'DM Serif Display', serif", color: col.bar }}
                       >
-                        <AnimatedPct value={s.percentage} delay={delay * 1000} />
+                        <AnimatedSten value={s.stenScore} delay={delay * 1000} />
+                        <span className="text-sm font-normal text-slate-400">/10</span>
                       </div>
                       <div
                         className="text-xs font-semibold px-2 py-0.5 rounded-full mt-0.5 inline-block"
@@ -208,14 +216,36 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
                     </div>
                   </div>
 
-                  <div className="h-2.5 rounded-full overflow-hidden mb-3" style={{ background: "#f0e8d8" }}>
-                    <div
-                      className="score-bar-fill h-full rounded-full"
-                      style={{ width: `${s.percentage}%`, background: col.bar, animationDelay: `${delay}s` }}
-                    />
+                  {/* Sten scale bar with numbered marks */}
+                  <div className="mb-3">
+                    <div className="relative h-2.5 rounded-full overflow-hidden" style={{ background: "#f0e8d8" }}>
+                      <div
+                        className="score-bar-fill h-full rounded-full"
+                        style={{ width: `${barPct}%`, background: col.bar, animationDelay: `${delay}s` }}
+                      />
+                    </div>
+                    <div className="flex justify-between mt-1 px-0.5">
+                      {[1,2,3,4,5,6,7,8,9,10].map((n) => (
+                        <span
+                          key={n}
+                          className="text-[9px] tabular-nums"
+                          style={{
+                            color: n === s.stenScore ? col.bar : "#c0b8a8",
+                            fontWeight: n === s.stenScore ? 700 : 400,
+                          }}
+                        >
+                          {n}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
                   <p className="text-sm text-slate-600 leading-relaxed">{s.interpretation}</p>
+
+                  {/* Raw score footnote */}
+                  <p className="text-[10px] text-slate-300 mt-2">
+                    Raw: {s.rawScore}/{s.maxScore}
+                  </p>
                 </div>
               );
             })}
@@ -248,7 +278,9 @@ export default function ReportScreen({ answers, onRetake }: ReportProps) {
         </div>
 
         <p className="text-center text-xs text-slate-400 mt-8 leading-relaxed">
-          This report is for educational and self-reflection purposes only. Scores are based on a simplified scoring approximation and should not be used for clinical diagnosis. For professional interpretation, consult a qualified psychologist.
+          This report is for educational and self-reflection purposes only.
+          {userInfo && " Sten scores are standardized against general population norms."}
+          {" "}For professional interpretation, consult a qualified psychologist.
         </p>
       </div>
     </div>

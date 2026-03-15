@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { computeScores } from "../lib/scoring";
+import type { Gender } from "../lib/norms";
 
 interface WelcomeProps {
   onStart: () => void;
@@ -10,6 +11,7 @@ interface WelcomeProps {
   isCompleted: boolean;
   answeredCount: number;
   answers: (number | null)[];
+  gender?: Gender;
 }
 
 function useCountUp(target: number, duration = 850) {
@@ -36,13 +38,15 @@ function CompletedSummary({
   answeredCount,
   onViewReport,
   onStart,
+  gender,
 }: {
   answers: (number | null)[];
   answeredCount: number;
   onViewReport: () => void;
   onStart: () => void;
+  gender?: Gender;
 }) {
-  const scores = useMemo(() => computeScores(answers), [answers]);
+  const scores = useMemo(() => computeScores(answers, gender), [answers, gender]);
   const highTraits = scores.filter((s) => s.level === "high").slice(0, 3);
   const lowTraits  = scores.filter((s) => s.level === "low").slice(0, 3);
 
@@ -174,7 +178,7 @@ function CompletedSummary({
 
 /* ── Main WelcomeScreen — 3 states ── */
 export default function WelcomeScreen({
-  onStart, onResume, onViewReport, hasProgress, isCompleted, answeredCount, answers,
+  onStart, onResume, onViewReport, hasProgress, isCompleted, answeredCount, answers, gender,
 }: WelcomeProps) {
 
   // State 3: completed → show summary
@@ -185,6 +189,7 @@ export default function WelcomeScreen({
         answeredCount={answeredCount}
         onViewReport={onViewReport}
         onStart={onStart}
+        gender={gender}
       />
     );
   }

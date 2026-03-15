@@ -1,13 +1,21 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
+import type { Gender } from "./norms";
 
-const STORAGE_KEY = "16pf_progress_v1";
+const STORAGE_KEY = "16pf_progress_v2";
+
+export interface UserInfo {
+  name: string;
+  age: number;
+  gender: Gender;
+}
 
 export interface TestProgress {
   answers: (number | null)[];   // index 0-186, value 0/1/2 or null
   currentQuestion: number;
   startedAt: string;
   completedAt?: string;
+  userInfo?: UserInfo;
 }
 
 const DEFAULT_PROGRESS: TestProgress = {
@@ -58,6 +66,11 @@ export function useTestProgress() {
     saveProgress({ ...latest, completedAt: new Date().toISOString() });
   }, [saveProgress]);
 
+  const setUserInfo = useCallback((info: UserInfo) => {
+    const latest = progressRef.current;
+    saveProgress({ ...latest, userInfo: info });
+  }, [saveProgress]);
+
   const resetProgress = useCallback(() => {
     const fresh: TestProgress = {
       answers: new Array(187).fill(null),
@@ -75,6 +88,7 @@ export function useTestProgress() {
     loaded,
     setAnswer,
     setCurrentQuestion,
+    setUserInfo,
     completeTest,
     resetProgress,
     answeredCount,

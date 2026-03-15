@@ -1,11 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useTestProgress } from "./lib/useTestProgress";
+import type { UserInfo } from "./lib/useTestProgress";
 import WelcomeScreen from "./components/WelcomeScreen";
+import UserInfoForm from "./components/UserInfoForm";
 import TestScreen from "./components/TestScreen";
 import ReportScreen from "./components/ReportScreen";
 
-type Screen = "welcome" | "test" | "report";
+type Screen = "welcome" | "userinfo" | "test" | "report";
 
 export default function Home() {
   const {
@@ -13,6 +15,7 @@ export default function Home() {
     loaded,
     setAnswer,
     setCurrentQuestion,
+    setUserInfo,
     completeTest,
     resetProgress,
     answeredCount,
@@ -29,9 +32,19 @@ export default function Home() {
 
   const handleStart = () => {
     resetProgress();
+    // Go to user info collection first
+    setScreen("userinfo");
+  };
+
+  const handleUserInfoSubmit = (info: UserInfo) => {
+    setUserInfo(info);
     setTestStartTime(Date.now());
     setScreen("test");
     fetch("/api/counter/attempts", { method: "POST" }).catch(() => {});
+  };
+
+  const handleUserInfoBack = () => {
+    setScreen("welcome");
   };
 
   const handleResume = () => {
@@ -77,6 +90,13 @@ export default function Home() {
           isCompleted={!!progress.completedAt}
           answeredCount={answeredCount}
           answers={progress.answers}
+          gender={progress.userInfo?.gender}
+        />
+      )}
+      {screen === "userinfo" && (
+        <UserInfoForm
+          onSubmit={handleUserInfoSubmit}
+          onBack={handleUserInfoBack}
         />
       )}
       {screen === "test" && (
@@ -94,6 +114,7 @@ export default function Home() {
         <ReportScreen
           answers={progress.answers}
           onRetake={handleRetake}
+          userInfo={progress.userInfo}
         />
       )}
     </>

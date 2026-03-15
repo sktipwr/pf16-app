@@ -1,15 +1,20 @@
 import { FACTORS, SCORING_MAP, Factor } from "./questions";
+import { rawToSten, stenLevel, type Gender } from "./norms";
 
 export interface FactorScore {
   factor: Factor;
   rawScore: number;
   maxScore: number;
-  percentage: number;   // 0–100
+  stenScore: number;       // 1–10 (standardized)
+  percentage: number;      // 0–100 (kept for backward compat)
   level: "low" | "mid" | "high";
   interpretation: string;
 }
 
-export function computeScores(answers: (number | null)[]): FactorScore[] {
+export function computeScores(
+  answers: (number | null)[],
+  gender?: Gender
+): FactorScore[] {
   // Accumulate raw scores per factor
   const totals: Record<string, { sum: number; max: number }> = {};
   FACTORS.forEach((f) => {
@@ -33,7 +38,10 @@ export function computeScores(answers: (number | null)[]): FactorScore[] {
   return FACTORS.map((factor): FactorScore => {
     const { sum, max } = totals[factor.id];
     const pct = max > 0 ? Math.round((sum / max) * 100) : 50;
-    const level: "low" | "mid" | "high" = pct < 35 ? "low" : pct > 65 ? "high" : "mid";
+
+    // Use sten scoring if gender is provided, otherwise fall back to percentage-based
+    const sten = gender ? rawToSten(factor.id, sum, gender) : percentageToSten(pct);
+    const level = stenLevel(sten);
 
     const interpretations: Record<string, Record<"low" | "mid" | "high", string>> = {
       A: {
@@ -122,9 +130,17 @@ export function computeScores(answers: (number | null)[]): FactorScore[] {
       factor,
       rawScore: sum,
       maxScore: max,
+      stenScore: sten,
       percentage: pct,
       level,
       interpretation: interpretations[factor.id]?.[level] ?? "",
     };
   });
+}
+
+/** Fallback: convert percentage to approximate sten when gender is not available */
+function percentageToSten(pct: number): number {
+  // Map 0-100% to 1-10 sten scale
+  const sten = Math.round((pct / 100) * 9 + 1);
+  return Math.max(1, Math.min(10, sten));
 }
